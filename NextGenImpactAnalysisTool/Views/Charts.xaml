@@ -1,0 +1,40 @@
+﻿<controls:MetroWindow x:Class="NextGenImpactAnalysisTool.Views.Charts"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NextGenImpactAnalysisTool.Views"
+             xmlns:cht="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             xmlns:model="clr-namespace:NextGenImpactAnalysisTool.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="400.184" Width="557.237"
+             WindowStartupLocation="CenterScreen" 
+             ShowTitleBar="True" Title="Chart"
+             ShowCloseButton="True" ShowMaxRestoreButton="False" 
+             ShowMinButton="False" GlowBrush="{DynamicResource AccentColorBrush}">
+    <Window.Resources>
+        <model:ProductDependecyCollection x:Key="ProductDependecyCollection1"/>
+    </Window.Resources>
+    <Grid>
+        <TabControl >
+            <TabItem Header="Bar Chart">
+                <cht:Chart Name="populationChart" Title="Product Dependency Chart">
+                    <cht:Chart.Series>
+                        <cht:ColumnSeries Name="ParodDepList" Title="Practice Management" ItemsSource="{Binding}"  IndependentValueBinding="{Binding Path=ProductName}" DependentValueBinding="{Binding Path=DependencyCount}">
+                        </cht:ColumnSeries>
+                    </cht:Chart.Series>
+                </cht:Chart>
+            </TabItem>
+            <TabItem Header="Pie Chart">
+                <cht:Chart Name="populationPieChart" Title="Product Dependency Chart">
+                    <cht:Chart.Series>
+                        <cht:PieSeries Name="ParodDepListpie" Title="Practice Management" ItemsSource="{Binding}"  IndependentValueBinding="{Binding Path=ProductName}" DependentValueBinding="{Binding Path=DependencyCount}">
+                        </cht:PieSeries>
+                    </cht:Chart.Series>
+                </cht:Chart>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</controls:MetroWindow>

@@ -1,0 +1,44 @@
+﻿<controls:MetroWindow x:Class="NextGenImpactAnalysisTool.Views.DependencyDiagram"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NextGenImpactAnalysisTool.Views"
+             xmlns:model="clr-namespace:NextGenImpactAnalysisTool.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="500.184" Width="800"
+             WindowStartupLocation="CenterScreen" 
+             ShowTitleBar="True" Title="Impact Diagram"
+             ShowCloseButton="True" ShowMaxRestoreButton="True" 
+             ShowMinButton="False" GlowBrush="{DynamicResource AccentColorBrush}">
+    <Window.Resources>
+        <Style TargetType="DataGridCell" x:Key="ColumnGone">
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+        <Style x:Key="DisabledColumn">
+            <Setter Property="DataGridColumn.CanUserResize"
+                                        Value="False" />
+            <Setter Property="DataGridColumn.CanUserSort"
+                                        Value="False" />
+            <Setter Property="DataGridColumn.CanUserReorder"
+                                        Value="False" />
+            <Setter Property="DataGridColumn.CellStyle"
+                                        Value="{StaticResource ColumnGone}" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="showcoord" />
+        <Border Grid.Column="1" BorderThickness="6" Background="White">
+            <ScrollViewer  Grid.Column="1" HorizontalScrollBarVisibility="Visible">
+                <Canvas Name="mycanvas" Height="4000" Width="4000" Background="Beige" Mouse.MouseMove="mycanvas_MouseMove">
+
+                </Canvas>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</controls:MetroWindow>

@@ -1,0 +1,102 @@
+﻿<controls:MetroWindow x:Class="NextGenImpactAnalysisTool.Views.InsertNodeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NextGenImpactAnalysisTool.Views"
+             xmlns:model="clr-namespace:NextGenImpactAnalysisTool.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="400.184" Width="557.237"
+             WindowStartupLocation="CenterScreen" 
+             ShowTitleBar="True" Title="Insert Node"
+             ShowCloseButton="False" ShowMaxRestoreButton="False" 
+             ShowMinButton="False" GlowBrush="{DynamicResource AccentColorBrush}" >
+    <Window.Resources>
+        <model:FunctionalDetailss x:Key="FunctionalDetails"/>
+        <model:DatabaseDetailsList x:Key="DatabaseDetails"/>
+        <model:OtherDetailsList x:Key="OtherDetails"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <TextBox Name="txtNodeName" Focusable="True"  controls:TextboxHelper.Watermark="Enter Node Here..."/>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Functional">
+                <Grid >
+                    <Grid.RowDefinitions >
+                        <RowDefinition />                        
+                    </Grid.RowDefinitions>
+                    <!--<StackPanel Orientation="Horizontal">
+                        <Button Content="+"  Width="20" Click="Button_Click_4"/>
+                        <Button  Content="-"  Width="20" />
+                        <TextBox Width="350" Name="txtimpact"/>
+
+                        <TextBox  Width="100" Name="txtmodule"/>
+                        <TextBox />
+                        <TextBox  Width="200" Name="txtcomplex"/>
+                    </StackPanel>-->
+                    <DataGrid Grid.Row="0" Name="Sampledatagrid" AutoGenerateColumns="False" ItemsSource="{StaticResource FunctionalDetails}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Impact" Binding="{Binding ImpactDescription, Mode=TwoWay}" Width="350"/>
+                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName, Mode=TwoWay}" Width="200"/>
+                            <DataGridTextColumn Header="Module" Binding="{Binding ModuleName, Mode=TwoWay}" Width="100"/>
+                            <DataGridTextColumn Header="Complexity" Binding="{Binding Complexity, Mode=TwoWay}" />
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Paste" Click="MenuItem_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="Workflow">
+
+            </TabItem>-->
+            <TabItem Header="Database">
+                <DataGrid Name="GridDatabaseDetails" AutoGenerateColumns="False" Grid.Row="1" ItemsSource="{StaticResource DatabaseDetails}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Table/SP/Fields" Binding="{Binding Typename, Mode=TwoWay}" Width="150"   IsReadOnly="False"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=TwoWay}" Width="150"  IsReadOnly="False"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=TwoWay}" Width="650" IsReadOnly="False"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Paste" Click="MenuItem_Click_1"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Other Details">
+                <DataGrid Grid.Row="0" Name="GridOtherDetails" AutoGenerateColumns="False" ItemsSource="{StaticResource OtherDetails}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=TwoWay}" Width="650" IsReadOnly="False"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=TwoWay}"   IsReadOnly="False"/>
+                        <DataGridTextColumn Header="Module" Binding="{Binding Module, Mode=TwoWay}"  IsReadOnly="False"/>
+                        <DataGridTextColumn Header="Complexity" Binding="{Binding Complexity, Mode=TwoWay}"  IsReadOnly="False"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Paste" Click="MenuItem_Click_2"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Commit Changes" Style="{StaticResource AccentedSquareButtonStyle}" Click="Button_Click_1"/>
+            <Button Grid.Column="1" Content="Close" Style="{StaticResource AccentedSquareButtonStyle}" Click="Button_Click"/>
+        </Grid>
+
+    </Grid>
+</controls:MetroWindow>

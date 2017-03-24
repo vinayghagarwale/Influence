@@ -1,0 +1,13 @@
+﻿<controls:MetroWindow  x:Class="NextGenImpactAnalysisTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:NextGenImpactAnalysisTool.ViewModels"
+        xmlns:uc="clr-namespace:NextGenImpactAnalysisTool.Views"
+        mc:Ignorable="d"
+        Title="Impact Analysis Tool" Height="800" Width="1300"
+        WindowStartupLocation="CenterScreen">
+
+</controls:MetroWindow>

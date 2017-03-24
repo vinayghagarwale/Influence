@@ -1,0 +1,290 @@
+﻿<controls:MetroWindow x:Class="NextGenImpactAnalysisTool.Views.ImpactAnalysisToolView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NextGenImpactAnalysisTool.Views"
+             xmlns:model ="clr-namespace:NextGenImpactAnalysisTool.Model"
+             mc:Ignorable="d" 
+             Title="Influence" TitlebarHeight="40" 
+             Height="800" Width="1300"
+             d:DesignHeight="300" d:DesignWidth="300" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="DataGridCell">
+            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},Path=Content.Text}"/>
+        </Style>
+        <!--Date Template to display search results-->  
+        <DataTemplate x:Key="fileItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <!--<CheckBox IsChecked="{Binding Select}"/>-->
+                <TextBlock Text="{Binding NodeName}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="fileItemExportTemplate">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding Select}"/>
+                <TextBlock Text="{Binding NodeName}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <!--Xml Data reader starts here-->
+        <XmlDataProvider x:Key="xmldata"
+                 Source="C:/ImpactAnalysisFile/NextGenImpact.XML"
+                 XPath="/Nextgen" />
+
+        <HierarchicalDataTemplate DataType="Node"
+                                  ItemsSource="{Binding XPath=./*}" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5,0,0,0" Text="{Binding XPath=@name}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="leaf">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0"
+                           Text="Leaf:" />
+                <TextBlock Margin="5,0,0,0"
+                           Text="{Binding XPath=@name}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="Nextgen"
+                                  ItemsSource="{Binding  XPath=./*}" >
+            <TextBlock Margin="0"
+                       Text="Nextgen" />
+        </HierarchicalDataTemplate>
+
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <!--Arrange Search textbox and clear button-->
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Width="180" Name="txtSearch" controls:TextboxHelper.Watermark="Quick Search..." KeyUp="txtSearch_KeyUp" />
+                    <Button Click="Button_Click">
+                        <Image Source="/NextGenImpactAnalysisTool;component/Resource/SearchIcon.png" />
+                    </Button>
+                    <Button Click="Button_Click_1" >
+                        <Image Source="/NextGenImpactAnalysisTool;component/Resource/Close.png" />
+                    </Button>
+                </StackPanel>
+                <!--Treeview grid to display list of domain items-->
+                <Grid Name="grd" Grid.Row="1" DataContext="{StaticResource xmldata}">
+                    <TabControl >
+                        <TabItem Header="List" Name="TabList" MouseUp="TabList_MouseUp">
+                            <TreeView Name="dirTree"                                      
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  ItemsSource="{Binding }"
+                                  VirtualizingStackPanel.IsVirtualizing="False"
+                                  VirtualizingStackPanel.VirtualizationMode="Standard" 
+                                  MouseUp="dirTree_MouseUp"
+                                  KeyUp="dirTree_KeyDown">
+                                <TreeView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add  Node" Click="MenuItem_Click" IsEnabled="True"/>
+                                        <MenuItem Header="Modify Node" Click="MenuItem_Click_2" IsEnabled="False"/>
+                                        <MenuItem Header="Delete Node" Click="MenuItem_Click_1" IsEnabled="False"/>
+                                        <Separator />
+                                        <MenuItem Header="Expand" Click="MenuItem_Click_8" IsEnabled="False" />
+                                        <MenuItem Header="Collaps" IsEnabled="False" />
+                                        <Separator IsEnabled="False" />
+                                        <MenuItem Header="Expand All" IsEnabled="False" />
+                                        <MenuItem Header="Collaps All" IsEnabled="False" />
+                                        <Separator />
+                                        <MenuItem Header="Add to Multiple Export List" Click="MenuItem_Click_6" />
+                                        <MenuItem Header="Export to Excel" Click="MenuItem_Click_3" />
+                                    </ContextMenu>
+                                </TreeView.ContextMenu>
+                            </TreeView>
+                        </TabItem>
+                        <TabItem Header="Result" Name="TabResult">
+                            <ListBox MouseUp="lstsearchresult_MouseUp" KeyUp="lstsearchresult_KeyUp" MouseEnter="lstsearchresult_MouseEnter"  Name="lstsearchresult" ItemsSource="{Binding}" ItemTemplate="{StaticResource fileItemTemplate}" >
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Export to Excel"  Click="MenuItem_Click_4" />
+                                        <MenuItem Header="Add to Multiple Export List"  Click="MenuItem_Click_5" />
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem Header="Export"  Name="TabExport" MouseUp="TabExport_MouseUp">
+                            <ListBox MouseUp="lstExportList_MouseUp" KeyUp="lstExportList_KeyUp"  Name="lstExportList" ItemsSource="{Binding}" ItemTemplate="{StaticResource fileItemExportTemplate}" >
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Export to Excel"  Click="MenuItem_Click_7" />
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+
+                </Grid>
+
+            </Grid>
+
+            <!--Show Grid Splitters here-->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Display Tree view path till leaf-->
+                <TextBlock Name="txtTreeViewPath" Text="{Binding Path=TreePath}" FontSize="15" Foreground="#CC119EDA" />
+
+                <TabControl Grid.Row="1">
+                    <TabItem Header="Functional">
+                        <DataGrid x:Name="dgridEmp"
+                                      DataContext="{Binding ElementName=dirTree,Path=SelectedItem}" 
+                                      ItemsSource="{Binding XPath=Functional}"                                      
+                                      AutoGenerateColumns="False" 
+                                      Margin="10,10,7,7"
+                                      AlternatingRowBackground="AliceBlue"
+                                      IsSynchronizedWithCurrentItem="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Impact Area" Binding="{Binding XPath=@Impact}" Width="600" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Product" Binding="{Binding XPath=@Product}" Width="150"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Module" Binding="{Binding XPath=@Module}" Width="150" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Complexity" Binding="{Binding XPath=@Complexity}"  IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--<TabItem Header="Workflow">
+
+                    </TabItem>-->
+                    <TabItem Header="Database">
+                        <DataGrid x:Name="dgridDatabase"
+                                      DataContext="{Binding ElementName=dirTree,Path=SelectedItem}" 
+                                      ItemsSource="{Binding XPath=Database}"                                      
+                                      AutoGenerateColumns="False" 
+                                      Margin="10,10,7,7" 
+                                      AlternatingRowBackground="AliceBlue">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Table/SP/Fields" Binding="{Binding XPath=@Typename}" Width="150"   IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Type" Binding="{Binding XPath=@Type}" Width="150"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding XPath=@Description}" Width="650" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Other Details">
+                        <DataGrid x:Name="dgridOthers"
+                                      DataContext="{Binding ElementName=dirTree,Path=SelectedItem}" 
+                                      ItemsSource="{Binding XPath=Others}"                                      
+                                      AutoGenerateColumns="False" 
+                                      Margin="10,10,7,7" 
+                                      AlternatingRowBackground="AliceBlue">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Description" Binding="{Binding XPath=@Description}" Width="650" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Type" Binding="{Binding XPath=@Type}"   IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Module" Binding="{Binding XPath=@Module}"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Complexity" Binding="{Binding XPath=@Complexity}"  IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+        </Grid>
+
+        <Grid Background="White" Grid.Column="1" ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" >
+                <controls:Tile ToolTip="Refresh" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Click="Tile_Click_1" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Refresh.JPG" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Configuration" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Click="Tile_Click" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Config.png" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Export to Excel" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Click="Tile_Click_2" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Export.png" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Charts" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Click="Tile_Click_3" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Chart.png" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Dependency Diagram" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Click="Tile_Click_4" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Org.png" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Sync with Server XML" 
+                    TiltFactor="0"
+                    Width="50" Height="50" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Sync.png" />
+                </controls:Tile>
+                <controls:Tile ToolTip="Reports" 
+                    TiltFactor="0" Visibility="Hidden"
+                    Width="50" Height="50" Click="Tile_Click_2" Foreground="#FF210D0D">
+                    <Image Source="/NextGenImpactAnalysisTool;component/Resource/Report.png"  />
+                </controls:Tile>
+            </StackPanel>
+            <Border Width="450" 
+                    Background="#FFF1EEED"
+                    HorizontalAlignment="Right"
+                    CornerRadius="0,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Name="imgLogo" Height="40" Source="/NextGenImpactAnalysisTool;component/Resource/NGH_Logo_COLOR1.png" Margin="0,10" Grid.ColumnSpan="2"/>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!--Show Statu bar here-->
+        <StatusBar Grid.Row="2">
+            <Grid ShowGridLines="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1090"/>
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" >
+                    <TextBlock Name="txtStatusColor" Text="" FontSize="20" Width="15" Height="20" />
+                    <TextBlock Name="txtStatus" Text="" FontSize="16" Height="20"/>
+                    <Separator />
+                    <controls:Tile ToolTip="Download" Content="Download"  Name="btnDownload" Foreground="White"
+                    TiltFactor="0"
+                    Width="100" Height="50" Click="btnDownload_Click" FontStretch="ExtraExpanded">
+                    </controls:Tile>
+
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Name="txtVersion" Text="Version :" FontSize="16" />
+                    <TextBlock Name="txtCurrent" Text="" FontSize="16" />
+                </StackPanel>
+            </Grid>
+
+
+        </StatusBar>
+    </Grid>
+</controls:MetroWindow>
